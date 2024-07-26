@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatVivo", "ChatVivo\ChatVivo.csproj", "{F5CB3601-29DF-478A-9601-F4D8D83F0D96}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Entity", "Entity", "{BE051E0A-6078-4ED1-8357-0457002116E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enitities", "Enitities\Enitities.csproj", "{8D1477F6-8F60-45E0-BB90-58B0EFE548F5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{88E95E35-877B-4FC5-B91E-A9508304FA34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatVivoService", "ChatVivoService\ChatVivoService.csproj", "{C4C50735-6C71-48F1-A820-BDB67262E192}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F5CB3601-29DF-478A-9601-F4D8D83F0D96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5CB3601-29DF-478A-9601-F4D8D83F0D96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5CB3601-29DF-478A-9601-F4D8D83F0D96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5CB3601-29DF-478A-9601-F4D8D83F0D96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D1477F6-8F60-45E0-BB90-58B0EFE548F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D1477F6-8F60-45E0-BB90-58B0EFE548F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D1477F6-8F60-45E0-BB90-58B0EFE548F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D1477F6-8F60-45E0-BB90-58B0EFE548F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4C50735-6C71-48F1-A820-BDB67262E192}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4C50735-6C71-48F1-A820-BDB67262E192}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4C50735-6C71-48F1-A820-BDB67262E192}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4C50735-6C71-48F1-A820-BDB67262E192}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8D1477F6-8F60-45E0-BB90-58B0EFE548F5} = {BE051E0A-6078-4ED1-8357-0457002116E8}
+		{C4C50735-6C71-48F1-A820-BDB67262E192} = {88E95E35-877B-4FC5-B91E-A9508304FA34}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {62EF280B-FD7A-4FB2-8208-EBB62A7BB8AD}
+	EndGlobalSection
+EndGlobal
