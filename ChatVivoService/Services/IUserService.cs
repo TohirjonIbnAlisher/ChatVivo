@@ -6,6 +6,9 @@ namespace ChatVivoService.Services;
 public interface IUserService
 {
     Task<User> CreateUserAsync(UserCreationDto userCreationDto);
-    Task<User> UpdateUserAsync(User user);
-    Task DeleteUserAsync(User user);
+    Task<User> UpdateUserAsync(UserModifyDto user);
+    Task<User> DeleteUserAsync(int userId);
+    IQueryable<User> GetAllUsers();
+
+    Task<User> GetUserByIdAsync(int userId);
 }

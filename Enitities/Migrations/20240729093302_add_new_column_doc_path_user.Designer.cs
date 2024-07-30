@@ -3,6 +3,7 @@ using System;
 using Enitities.Contexs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Enitities.Migrations
 {
     [DbContext(typeof(ChatVivoDataContex))]
-    partial class ChatVivoDataContexModelSnapshot : ModelSnapshot
+    [Migration("20240729093302_add_new_column_doc_path_user")]
+    partial class add_new_column_doc_path_user
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

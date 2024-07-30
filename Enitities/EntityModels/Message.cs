@@ -6,11 +6,20 @@ namespace Enitities.EntityModels;
 public class Message : BaseModel
 {
     [Column("text")]
-    public string Text { get; set; }
+    public string? Text { get; set; }
+
     [Column("chat_id")]
     [ForeignKey(nameof(Chat))]
     public int ChatId { get; set; }
     public virtual Chat Chat { get; set; }
+
+    [Column("doc_path")]
+    public string? DocPath { get; set; }
+
+    [Column("parent_id")]
+    [ForeignKey(nameof(Sender))]
+    public int? ParentId { get; set; }
+    public virtual Message ParentMessage { get; set; }
 
     [Column("sender_id")]
     [ForeignKey(nameof(Sender))]

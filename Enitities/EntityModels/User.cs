@@ -20,6 +20,12 @@ public class User : BaseModel
     [MaxLength(30)]
     public string PhoneNumber { get; set; }
 
+    [Column("is_moderator")]
+    public bool IsModerator { get; set; }
+
+    [Column("connection_id")]
+    public string ConnectionId { get; set; }
+
     [Column("token")]
     public string? Token { get; set; }
     [Column("token_expired_date")]

@@ -3,6 +3,7 @@ using System;
 using Enitities.Contexs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Enitities.Migrations
 {
     [DbContext(typeof(ChatVivoDataContex))]
-    partial class ChatVivoDataContexModelSnapshot : ModelSnapshot
+    [Migration("20240729052815_add_new_column_connection_id_to_user")]
+    partial class add_new_column_connection_id_to_user
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,13 +47,7 @@ namespace Enitities.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer")
-                        .HasColumnName("user_id");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("chat", "chats");
                 });
@@ -106,10 +103,6 @@ namespace Enitities.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
-                    b.Property<string>("DocPath")
-                        .HasColumnType("text")
-                        .HasColumnName("doc_path");
-
                     b.Property<bool>("IsRead")
                         .HasColumnType("boolean")
                         .HasColumnName("is_read");
@@ -123,6 +116,7 @@ namespace Enitities.Migrations
                         .HasColumnName("sent_datetime");
 
                     b.Property<string>("Text")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("text");
 
@@ -196,17 +190,6 @@ namespace Enitities.Migrations
                         .IsUnique();
 
                     b.ToTable("user", "auth");
-                });
-
-            modelBuilder.Entity("Enitities.EntityModels.Chat", b =>
-                {
-                    b.HasOne("Enitities.EntityModels.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Enitities.EntityModels.ChatMember", b =>

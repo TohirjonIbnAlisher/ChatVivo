@@ -1,4 +1,6 @@
 
+using ChatVivo.Extensions;
+using ChatVivoService.Hubs;
 using Enitities.Contexs;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,8 +14,10 @@ namespace ChatVivo
 
             // Add services to the container.
 
+            builder.Services.AddApplication()
+                .AddRepositories();
             builder.Services.AddControllers();
-
+            builder.Services.AddSignalR();
             builder.Services.AddDbContext<ChatVivoDataContex>(options =>
             {
                 options.UseNpgsql(builder.Configuration.GetConnectionString("NpgsqlConnection"));
@@ -30,12 +34,19 @@ namespace ChatVivo
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                app.UseCors(c =>
+                {
+                    c.AllowAnyHeader();
+                    c.AllowAnyOrigin();
+                });
             }
 
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
 
+            app.MapHub<ChatHub>("/chathub");
+          
 
             app.MapControllers();
 
