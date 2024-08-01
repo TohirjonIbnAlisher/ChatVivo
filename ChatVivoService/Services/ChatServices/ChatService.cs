@@ -9,18 +9,15 @@ namespace ChatVivoService.Services.ChatServices;
 public class ChatService : IChatService
 {
     private readonly IChatRepository _chatRepository;
-    private readonly IChatMemberRepository _chatMemberRepository;
     private readonly IHubContext<ChatHub> _chatHubContext;
     private readonly IUserService _userService;
 
     public ChatService(
         IChatRepository _chatRepository,
-        IChatMemberRepository _chatMemberRepository,
         IHubContext<ChatHub> chatHubContext,
         IUserService _userService)
     {
         this._chatRepository = _chatRepository;
-        this._chatMemberRepository = _chatMemberRepository;
         this._chatHubContext = chatHubContext;
         this._userService = _userService;
     }
@@ -36,8 +33,6 @@ public class ChatService : IChatService
         var storedChat = await this._chatRepository.InsertAsync(chat);
 
         var storedUser = await this._userService.GetUserByIdAsync(userId);
-
-
 
         await _chatHubContext.Clients.Client(storedUser.ConnectionId).SendAsync("OnCreatedNewTheme", storedChat);
 

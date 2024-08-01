@@ -17,7 +17,7 @@ public class Message : BaseModel
     public string? DocPath { get; set; }
 
     [Column("parent_id")]
-    [ForeignKey(nameof(Sender))]
+    [ForeignKey(nameof(ParentMessage))]
     public int? ParentId { get; set; }
     public virtual Message ParentMessage { get; set; }
 

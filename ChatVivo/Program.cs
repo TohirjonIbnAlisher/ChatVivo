@@ -23,6 +23,7 @@ namespace ChatVivo
                 options.UseNpgsql(builder.Configuration.GetConnectionString("NpgsqlConnection"));
             });
 
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -41,6 +42,8 @@ namespace ChatVivo
                 });
             }
 
+           
+
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
@@ -50,6 +53,7 @@ namespace ChatVivo
 
             app.MapControllers();
 
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             app.Run();
         }
     }

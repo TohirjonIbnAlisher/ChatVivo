@@ -18,14 +18,22 @@ public class UserController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateUserAsync([FromBody] UserCreationDto dto)
     {
-        await _userService.CreateUserAsync(dto);
-        return Ok(dto);
+        var createdUser = await _userService.CreateUserAsync(dto);
+        return Ok(createdUser);
     }
 
     [HttpGet("Id")]
     public async Task<ActionResult<User>> GetUserByIdAsync([FromQuery] int id)
     {
         return await this._userService.GetUserByIdAsync(id);
+    }
+
+    [HttpGet]
+    public ActionResult<IQueryable<User>> GetAllUsers()
+    {
+        var allUsers = this._userService.GetAllUsers();
+
+        return Ok(allUsers);
     }
 
     [HttpDelete("Id")]

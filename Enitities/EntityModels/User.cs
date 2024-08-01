@@ -20,6 +20,10 @@ public class User : BaseModel
     [MaxLength(30)]
     public string PhoneNumber { get; set; }
 
+    [Column("email")]
+    [MaxLength(50)]
+    public string Email { get; set; }
+
     [Column("is_moderator")]
     public bool IsModerator { get; set; }
 

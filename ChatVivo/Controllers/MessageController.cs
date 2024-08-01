@@ -21,8 +21,8 @@ public class MessageController : ControllerBase
         [FromBody] CreateMessageDTO dto
         )
     {
-        await this._messageService.CreateMessageAsync(dto);
-        return Ok(dto);
+        var cretedMessage = await this._messageService.CreateMessageAsync(dto);
+        return Ok(cretedMessage);
     }
 
     [HttpGet("GetMessagesByUserId")]
@@ -33,9 +33,17 @@ public class MessageController : ControllerBase
         return messages;
     }
 
+    [HttpGet("GetMessageByChatId")]
+    public IQueryable<Message> GetAllMessageByChatId(int chatId)
+    {
+        return this._messageService.GetAllMessagesByChatId(chatId);
+    }
+
     [HttpPut("id")]
     public async Task<Message> UpdateMessageStatusAsync(int messageId)
     {
+        var updatedMessage = await this._messageService.UpdateMessageStatusAsync(messageId);
 
+        return updatedMessage;
     }
 }

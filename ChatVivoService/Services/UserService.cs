@@ -22,7 +22,7 @@ public class UserService : IUserService
 
     public async Task<User> CreateUserAsync(UserCreationDto userCreationDto)
     {
-        var storedUser = this._userRepository.SelectByExpressionAsync(user => user.PhoneNumber == userCreationDto.PhoneNumber, new string[] { });
+        var storedUser = await this._userRepository.SelectByExpressionAsync(user => user.PhoneNumber == userCreationDto.PhoneNumber, new string[] { }).FirstOrDefaultAsync();
 
         if(storedUser != null)
         {
@@ -35,6 +35,7 @@ public class UserService : IUserService
             LastName = userCreationDto.LastName,
             CreatedAt = DateTime.Now,
             PhoneNumber = userCreationDto.PhoneNumber,
+            Email = userCreationDto.Email,
             IsModerator = userCreationDto.IsModerator,
             ConnectionId = userCreationDto.ConnectionId,
             Token = "",
@@ -54,7 +55,7 @@ public class UserService : IUserService
             await this._hubContext.Clients.Group("Admin").SendAsync("OnCreatedNewUser", insertedUser);
         }
 
-        return user;
+        return insertedUser;
 
     }
 
@@ -111,5 +112,4 @@ public class UserService : IUserService
 
         return uptadetUser;
     }      
-    
 }

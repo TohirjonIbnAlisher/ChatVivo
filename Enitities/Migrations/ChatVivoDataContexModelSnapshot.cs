@@ -32,7 +32,7 @@ namespace Enitities.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_at");
 
                     b.Property<string>("Name")
@@ -41,7 +41,7 @@ namespace Enitities.Migrations
                         .HasColumnName("name");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("updated_at");
 
                     b.Property<int>("UserId")
@@ -73,7 +73,7 @@ namespace Enitities.Migrations
                         .HasColumnName("created_at");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("updated_at");
 
                     b.Property<int>("UserId")
@@ -103,7 +103,7 @@ namespace Enitities.Migrations
                         .HasColumnName("chat_id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_at");
 
                     b.Property<string>("DocPath")
@@ -114,12 +114,16 @@ namespace Enitities.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("is_read");
 
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("integer")
+                        .HasColumnName("parent_id");
+
                     b.Property<int>("SenderId")
                         .HasColumnType("integer")
                         .HasColumnName("sender_id");
 
                     b.Property<DateTime>("SentDateTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("sent_datetime");
 
                     b.Property<string>("Text")
@@ -127,12 +131,14 @@ namespace Enitities.Migrations
                         .HasColumnName("text");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("updated_at");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ChatId");
+
+                    b.HasIndex("ParentId");
 
                     b.HasIndex("SenderId");
 
@@ -154,8 +160,14 @@ namespace Enitities.Migrations
                         .HasColumnName("connection_id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_at");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("email");
 
                     b.Property<string>("FistName")
                         .IsRequired()
@@ -183,11 +195,11 @@ namespace Enitities.Migrations
                         .HasColumnName("token");
 
                     b.Property<DateTime?>("TokenExpiedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("token_expired_date");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("updated_at");
 
                     b.HasKey("Id");
@@ -236,6 +248,10 @@ namespace Enitities.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Enitities.EntityModels.Message", "ParentMessage")
+                        .WithMany()
+                        .HasForeignKey("ParentId");
+
                     b.HasOne("Enitities.EntityModels.User", "Sender")
                         .WithMany()
                         .HasForeignKey("SenderId")
@@ -243,6 +259,8 @@ namespace Enitities.Migrations
                         .IsRequired();
 
                     b.Navigation("Chat");
+
+                    b.Navigation("ParentMessage");
 
                     b.Navigation("Sender");
                 });

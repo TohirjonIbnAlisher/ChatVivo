@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Enitities.Migrations
 {
     [DbContext(typeof(ChatVivoDataContex))]
-    [Migration("20240729052815_add_new_column_connection_id_to_user")]
-    partial class add_new_column_connection_id_to_user
+    [Migration("20240731105715_database_first_migration")]
+    partial class database_first_migration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,7 +47,13 @@ namespace Enitities.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("chat", "chats");
                 });
@@ -103,9 +109,17 @@ namespace Enitities.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
+                    b.Property<string>("DocPath")
+                        .HasColumnType("text")
+                        .HasColumnName("doc_path");
+
                     b.Property<bool>("IsRead")
                         .HasColumnType("boolean")
                         .HasColumnName("is_read");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("integer")
+                        .HasColumnName("parent_id");
 
                     b.Property<int>("SenderId")
                         .HasColumnType("integer")
@@ -116,7 +130,6 @@ namespace Enitities.Migrations
                         .HasColumnName("sent_datetime");
 
                     b.Property<string>("Text")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("text");
 
@@ -127,6 +140,8 @@ namespace Enitities.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ChatId");
+
+                    b.HasIndex("ParentId");
 
                     b.HasIndex("SenderId");
 
@@ -150,6 +165,12 @@ namespace Enitities.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("email");
 
                     b.Property<string>("FistName")
                         .IsRequired()
@@ -192,6 +213,17 @@ namespace Enitities.Migrations
                     b.ToTable("user", "auth");
                 });
 
+            modelBuilder.Entity("Enitities.EntityModels.Chat", b =>
+                {
+                    b.HasOne("Enitities.EntityModels.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Enitities.EntityModels.ChatMember", b =>
                 {
                     b.HasOne("Enitities.EntityModels.Chat", "Chat")
@@ -219,6 +251,10 @@ namespace Enitities.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Enitities.EntityModels.Message", "ParentMessage")
+                        .WithMany()
+                        .HasForeignKey("ParentId");
+
                     b.HasOne("Enitities.EntityModels.User", "Sender")
                         .WithMany()
                         .HasForeignKey("SenderId")
@@ -226,6 +262,8 @@ namespace Enitities.Migrations
                         .IsRequired();
 
                     b.Navigation("Chat");
+
+                    b.Navigation("ParentMessage");
 
                     b.Navigation("Sender");
                 });

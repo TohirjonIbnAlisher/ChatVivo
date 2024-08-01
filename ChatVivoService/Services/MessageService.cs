@@ -1,7 +1,7 @@
 ﻿using ChatVivoService.DataTransferObjects;
 using ChatVivoService.Hubs;
 using Enitities.EntityModels;
-using Enitities.Repositories;
+using Enitities.Repositories.ChatRepositories;
 using Enitities.Repositories.MessageRepositories;
 using Enitities.Repositories.UserRepositories;
 using Microsoft.AspNetCore.SignalR;
@@ -12,33 +12,32 @@ namespace ChatVivoService.Services;
 public class MessageService : IMessageService
 {
     private readonly IMessageRepository _messageRepository;
+    private readonly IChatRepository _chatRepository;
     private readonly IUserRepositoy _userRepository;
     private readonly IHubContext<ChatHub> _chatHubContext;
 
     public MessageService(
         IMessageRepository messageRepository,
         IHubContext<ChatHub> chatHubContext,
-        IUserRepositoy userRepository)
+        IUserRepositoy userRepository,
+        IChatRepository chatRepository)
     {
         _messageRepository = messageRepository;
         _chatHubContext = chatHubContext;
         this._userRepository = userRepository;
+        this._chatRepository = chatRepository;
     }
 
     public async Task<Message> CreateMessageAsync(CreateMessageDTO createMessageDTO)
     {
-        var storedMessage = await this._messageRepository.SelectByIdAsync(createMessageDTO.Id);
-
-        if (storedMessage != null)
-        {
-            throw new Exception($"Message already exist with such id {createMessageDTO.Id}");
-        }
+       
 
         Message message = new Message
         {
             SenderId = createMessageDTO.SenderId,
             ChatId = createMessageDTO.ChatId,
             IsRead = false,
+            ParentId = createMessageDTO.ParentId,
             SentDateTime = DateTime.Now,
             CreatedAt = DateTime.Now,
             Text = createMessageDTO.Message,
@@ -46,11 +45,18 @@ public class MessageService : IMessageService
         };
         var inserted =  await this._messageRepository.InsertAsync(message);
 
-        var userModerator = await this._userRepository.SelectByExpressionAsync(user => user.Id == createMessageDTO.SenderId && user.IsModerator, new string[] { }).FirstOrDefaultAsync();
+        var sentMessageWithAllRelations = await this._messageRepository.SelectByExpressionAsync(message => message.Id == inserted.Id, new string[] { "Chat", "ParentMessage", "Sender" }).FirstOrDefaultAsync();
+        var userModerator = await this._userRepository.SelectByExpressionAsync(user => user.Id == createMessageDTO.SenderId, new string[] { }).FirstOrDefaultAsync();
 
-        if(userModerator != null)
+        if(userModerator.IsModerator)
         {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+            var chatData = await this._chatRepository.SelectByExpressionAsync(chat => chat.Id == createMessageDTO.ChatId, new string[] { "User" }).FirstOrDefaultAsync();
+
+            await this._chatHubContext.Clients.Client(chatData.User.ConnectionId).SendAsync("OnSendMessage", sentMessageWithAllRelations);
+        }
+        else
+        {
+            await this._chatHubContext.Clients.Group("Admin").SendAsync("OnSendMessage", sentMessageWithAllRelations);
         }
 
         return message;
@@ -71,7 +77,14 @@ public class MessageService : IMessageService
 
     public IQueryable<Message> GetAllMessagesByUserId(int userId)
     {
-        var messages = this._messageRepository.SelectByExpressionAsync(message => message.SenderId == userId, new string[] { });
+        var messages = this._messageRepository.SelectByExpressionAsync(message => message.SenderId == userId, new string[] { "Chat", "ParentMessage", "Sender" });
+
+        return messages;
+    }
+
+    public IQueryable<Message> GetAllMessagesByChatId(int chatId)
+    {
+        var messages = this._messageRepository.SelectByExpressionAsync(message => message.ChatId == chatId, new string[] { "Chat", "ParentMessage", "Sender" });
 
         return messages;
     }
@@ -105,7 +118,7 @@ public class MessageService : IMessageService
 
         var updatedMessage = await this._messageRepository.UpdateAsync(storedMessage);
 
-        var clientUserId = storedMessage.ChatId;
+        var clientUserId = storedMessage.Chat.UserId;
 
         var currentUserClient = await this._userRepository.SelectByIdAsync(clientUserId);
 

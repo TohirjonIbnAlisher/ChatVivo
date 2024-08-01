@@ -34,6 +34,8 @@ public class ChatController : ControllerBase
     [HttpGet("userId")]
     public IQueryable<Chat> GetAllChatsByUserId(int userId)
     {
-        return null;
+        var chatsByUserId = this._chatService.GetChatsByUserId(userId);
+
+        return chatsByUserId;
     }
 }
