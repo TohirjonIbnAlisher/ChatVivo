@@ -42,8 +42,6 @@ namespace ChatVivo
                 });
             }
 
-           
-
             app.UseHttpsRedirection();
 
             app.UseAuthorization();

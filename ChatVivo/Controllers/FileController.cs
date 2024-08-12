@@ -23,8 +23,8 @@ public class FileController : ControllerBase
     {
         var path = FileHelper.AddFiles(model);
 
-        await _fileService.SendFilePathAsync(path, model.UserFileHelper);
+        var insertedPhoto = await _fileService.SendFilePathAsync(path, model.UserFileHelper);
 
-        return Ok(path);
+        return Ok(insertedPhoto);
     }
 }

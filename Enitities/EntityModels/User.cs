@@ -29,9 +29,4 @@ public class User : BaseModel
 
     [Column("connection_id")]
     public string ConnectionId { get; set; }
-
-    [Column("token")]
-    public string? Token { get; set; }
-    [Column("token_expired_date")]
-    public DateTime? TokenExpiedDate { get; set; }
 }

@@ -24,20 +24,8 @@ public class FileService
         _messageRepository = messageRepository;
     }
 
-    public async Task SendFilePathAsync(string filePath, UserFileHelper userHelperDTO)
+    public async Task<Message> SendFilePathAsync(string filePath, UserFileHelper userHelperDTO)
     {
-        if(userHelperDTO.IsModerator)
-        {
-            var fileSendUser = await this._userRepository.SelectByExpressionAsync(user => user.Id == userHelperDTO.ReceiverId, new string[] { }).FirstOrDefaultAsync();
-
-            await this._hubContext.Clients.Client(fileSendUser.ConnectionId).SendAsync("OnSendDocument", filePath);
-        }
-
-        else
-        {
-            await this._hubContext.Clients.Group("Admin").SendAsync("OnSendDocument", filePath);
-        }
-
         var message = new Message()
         {
             DocPath = filePath,
@@ -49,5 +37,19 @@ public class FileService
         };
 
         var createdMessage = await this._messageRepository.InsertAsync(message);
+
+        if (userHelperDTO.IsModerator)
+        {
+            var fileSendUser = await this._userRepository.SelectByExpressionAsync(user => user.Id == userHelperDTO.ReceiverId, new string[] { }).FirstOrDefaultAsync();
+
+            await this._hubContext.Clients.Client(fileSendUser.ConnectionId).SendAsync("OnSendDocument", filePath);
+        }
+
+        else
+        {
+            await this._hubContext.Clients.Group("Admin").SendAsync("OnSendDocument", filePath);
+        }
+
+        return createdMessage;
     }
 }

@@ -30,8 +30,6 @@ public class MessageService : IMessageService
 
     public async Task<Message> CreateMessageAsync(CreateMessageDTO createMessageDTO)
     {
-       
-
         Message message = new Message
         {
             SenderId = createMessageDTO.SenderId,
@@ -45,12 +43,12 @@ public class MessageService : IMessageService
         };
         var inserted =  await this._messageRepository.InsertAsync(message);
 
-        var sentMessageWithAllRelations = await this._messageRepository.SelectByExpressionAsync(message => message.Id == inserted.Id, new string[] { "Chat", "ParentMessage", "Sender" }).FirstOrDefaultAsync();
-        var userModerator = await this._userRepository.SelectByExpressionAsync(user => user.Id == createMessageDTO.SenderId, new string[] { }).FirstOrDefaultAsync();
+        var sentMessageWithAllRelations = await this._messageRepository.SelectByExpressionAsync(message => message.Id == inserted.Id, new string[] { "Chat", "ParentMessage", "Sender" }).AsNoTracking().FirstOrDefaultAsync();
+        //var userModerator = await this._userRepository.SelectByExpressionAsync(user => user.Id == createMessageDTO.SenderId, new string[] { }).FirstOrDefaultAsync();
 
-        if(userModerator.IsModerator)
+        if(sentMessageWithAllRelations.Sender.IsModerator)
         {
-            var chatData = await this._chatRepository.SelectByExpressionAsync(chat => chat.Id == createMessageDTO.ChatId, new string[] { "User" }).FirstOrDefaultAsync();
+            var chatData = await this._chatRepository.SelectByExpressionAsync(chat => chat.Id == createMessageDTO.ChatId, new string[] { "User" }).AsNoTracking().FirstOrDefaultAsync();
 
             await this._chatHubContext.Clients.Client(chatData.User.ConnectionId).SendAsync("OnSendMessage", sentMessageWithAllRelations);
         }
@@ -115,6 +113,7 @@ public class MessageService : IMessageService
             throw new Exception($"Message not found with id such {messageId}");
 
         storedMessage.IsRead = true;
+        storedMessage.UpdatedAt = DateTime.Now;
 
         var updatedMessage = await this._messageRepository.UpdateAsync(storedMessage);
 

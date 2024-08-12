@@ -37,9 +37,7 @@ public class UserService : IUserService
             PhoneNumber = userCreationDto.PhoneNumber,
             Email = userCreationDto.Email,
             IsModerator = userCreationDto.IsModerator,
-            ConnectionId = userCreationDto.ConnectionId,
-            Token = "",
-            TokenExpiedDate = null
+            ConnectionId = userCreationDto.ConnectionId
         };
 
 
@@ -47,13 +45,18 @@ public class UserService : IUserService
 
         if (userCreationDto.IsModerator)
         {
-            await this._hubContext.Groups.AddToGroupAsync(userCreationDto.ConnectionId, "Admins");
+            await this._hubContext.Groups.AddToGroupAsync(userCreationDto.ConnectionId, "Admin");
         }
 
         else
         {
+            //await this._hubContext.Clients.Client("iH94wd8WT9r_nkxyvYO0Gg").SendAsync("OnCreatedNewUser", insertedUser);
             await this._hubContext.Clients.Group("Admin").SendAsync("OnCreatedNewUser", insertedUser);
         }
+
+        //var moderators = this._userRepository.SelectByExpressionAsync(user => user.IsModerator, new string[] { }).Select(user => user.ConnectionId);
+
+        //await this._hubContext.Clients.Client("Oo-s-Wlvh7lcI2_o4buiYw").SendAsync("OnCreatedNewUser", "jgvgvg");
 
         return insertedUser;
 
@@ -61,7 +64,7 @@ public class UserService : IUserService
 
     public async Task<User> DeleteUserAsync(int userId)
     {
-        var storedUser = await this._userRepository.SelectByExpressionAsync(user => user.Id == user.Id, new string[] { }).FirstOrDefaultAsync();
+        var storedUser = await this._userRepository.SelectByExpressionAsync(user => user.Id == userId, new string[] { }).FirstOrDefaultAsync();
 
         if (storedUser == null)
         {
@@ -72,7 +75,7 @@ public class UserService : IUserService
 
         if (storedUser.IsModerator)
         {
-            await this._hubContext.Groups.RemoveFromGroupAsync(storedUser.ConnectionId, "Admins");
+            await this._hubContext.Groups.RemoveFromGroupAsync(storedUser.ConnectionId, "Admin");
         }
 
         else
