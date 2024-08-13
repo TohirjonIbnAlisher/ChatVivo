@@ -24,15 +24,6 @@ public class ChatController : ControllerBase
         return createdChat;
     }
 
-    [HttpDelete("id")]
-    public async Task<Chat> DeleteChatAsync(int chatId)
-    {
-        var deletedChat = await this._chatService
-            .DeleteChatAsync(chatId);
-
-        return deletedChat;
-    }
-
     [HttpGet("userId")]
     public IQueryable<Chat> GetAllChatsByUserId(int userId)
     {
@@ -40,5 +31,14 @@ public class ChatController : ControllerBase
             .GetChatsByUserId(userId);
 
         return chatsByUserId;
+    }
+
+    [HttpPut("chatId")]
+    public async Task<Chat> ModifyChatStatusAsync(int chatId)
+    {
+        var updatedChat = await this._chatService
+            .UpdateChatStatusAsync(chatId);
+
+        return updatedChat;
     }
 }

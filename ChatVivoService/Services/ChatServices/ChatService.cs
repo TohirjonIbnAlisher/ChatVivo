@@ -32,11 +32,11 @@ public class ChatService : IChatService
         };
         var storedChat = await this._chatRepository.InsertAsync(chat);
 
-        var storedUser = await this._userService.GetUserByIdAsync(userId);
+        //var storedUser = await this._userService.GetUserByIdAsync(userId);
 
-        await _chatHubContext.Clients.Client(storedUser.ConnectionId).SendAsync("OnCreatedNewTheme", storedChat);
+        //await _chatHubContext.Clients.Client(storedUser.ConnectionId).SendAsync("OnCreatedNewTheme", storedChat);
 
-        await _chatHubContext.Clients.Group("Admin").SendAsync("OnCreatedNewTheme", storedChat);
+        //await _chatHubContext.Clients.Group("Admin").SendAsync("OnCreatedNewTheme", storedChat);
 
         return storedChat;
     }
@@ -59,5 +59,20 @@ public class ChatService : IChatService
     public IQueryable<Chat> GetChatsByUserId(int userId)
     {
         return this._chatRepository.SelectByExpressionAsync(chat => chat.UserId == userId, new string[] {"User"});
-    } 
+    }
+
+    public async Task<Chat> UpdateChatStatusAsync(int chatId)
+    {
+        var storedChat = await this._chatRepository.SelectByIdAsync(chatId);
+
+        if (storedChat is null)
+            throw new Exception("Chat not found");
+
+
+        storedChat.Status = ChatStatus.Closed;
+        
+        var updatedChat = await this._chatRepository.UpdateAsync(storedChat);
+
+        return updatedChat;
+    }
 }
