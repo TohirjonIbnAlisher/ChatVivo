@@ -40,7 +40,7 @@ namespace ChatVivo
                     c.AllowAnyHeader();
                     c.AllowAnyOrigin();
                     c.SetIsOriginAllowed(c => true);
-                    c.AllowCredentials();
+                   
                     c.AllowAnyMethod();
                 });
             }
