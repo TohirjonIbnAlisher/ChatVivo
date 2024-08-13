@@ -27,7 +27,8 @@ public class ChatService : IChatService
         {
             CreatedAt = DateTime.Now,
             Name = chatName,
-            UserId = userId
+            UserId = userId,
+            Status = ChatStatus.Active
         };
         var storedChat = await this._chatRepository.InsertAsync(chat);
 

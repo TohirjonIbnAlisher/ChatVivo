@@ -15,9 +15,6 @@ public class Person : BaseModel
     [MaxLength(30)]
     public string PhoneNumber { get; set; }
 
-    [Column("is_moderator")]
-    public bool IsModerator { get; set; }
-
     [Column("connection_id")]
     public string ConnectionId { get; set; }
 }

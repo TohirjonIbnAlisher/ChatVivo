@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ChatVivoService.DataTransferObjects;
+using ChatVivoService.Services.AdminServices;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ChatVivo.Controllers;
 
@@ -10,40 +12,20 @@ public class AdminController : ControllerBase
 
     public AdminController(IAdminService AdminService)
     {
-        _AdminService = AdminService;
+        this._adminService = AdminService;
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateAdminAsync([FromBody] AdminCreationDto dto)
+    public async Task<IActionResult> CreateAdminAsync([FromBody] AdminCreationDTO dto)
     {
-        var createdAdmin = await _AdminService.CreateAdminAsync(dto);
+        var createdAdmin = await _adminService.CreateAdminAsync(dto);
         return Ok(createdAdmin);
     }
 
     [HttpPut]
     public async Task<IActionResult> ModifyAdminStatusAsync(int id)
     {
-        var createdAdmin = await _AdminService.CreateAdminAsync(dto);
-        return Ok(createdAdmin);
+        var updatedAdmin = await this._adminService.UpdateAdminStatusAsync(id);
+        return Ok(updatedAdmin);
     }
-
-    //[HttpGet("Id")]
-    //public async Task<ActionResult<Admin>> GetAdminByIdAsync([FromQuery] int id)
-    //{
-    //    return await this._AdminService.GetAdminByIdAsync(id);
-    //}
-
-    //[HttpGet]
-    //public ActionResult<IQueryable<Admin>> GetAllAdmins()
-    //{
-    //    var allAdmins = this._AdminService.GetAllAdmins();
-
-    //    return Ok(allAdmins);
-    //}
-
-    //[HttpDelete("Id")]
-    //public async Task<ActionResult<Admin>> DeleteAdminAsync(int id)
-    //{
-    //    return await this._AdminService.DeleteAdminAsync(id);
-    //}
 }

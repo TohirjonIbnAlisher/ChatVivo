@@ -11,7 +11,7 @@ public class Chat : BaseModel
 
     public virtual User User { get; set; }
 
-    [Column("status")] public ChatStatus Status { get; set; }
+    [Column("status")] public ChatStatus Status { get; set; } = ChatStatus.Active;
 }
 
 public enum ChatStatus
