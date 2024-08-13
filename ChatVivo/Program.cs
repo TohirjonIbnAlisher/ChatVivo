@@ -1,4 +1,3 @@
-
 using ChatVivo.Extensions;
 using ChatVivoService.Hubs;
 using Enitities.Contexs;
@@ -33,6 +32,7 @@ namespace ChatVivo
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+                app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI();
                 app.UseCors(c =>
