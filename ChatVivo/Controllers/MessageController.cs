@@ -18,8 +18,7 @@ public class MessageController : ControllerBase
 
     [HttpPost]
     public async Task<IActionResult> CreateMessageAsync(
-        [FromBody] CreateMessageDTO dto
-        )
+        [FromBody] CreateMessageDTO dto)
     {
         var cretedMessage = await this._messageService.CreateMessageAsync(dto);
         return Ok(cretedMessage);

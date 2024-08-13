@@ -2,10 +2,8 @@
 
 public class UserCreationDto
 { 
-    public string FirstName {  get; set; }
-    public string LastName { get; set; }
-    public string Email { get; set; }
+    public string FIO {  get; set; }
     public string PhoneNumber { get; set; }
-    public bool IsModerator { get; set; }   
+    public bool IsModerator { get; set; } = false;
     public string ConnectionId { get; set; }
 }

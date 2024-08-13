@@ -10,4 +10,12 @@ public class Chat : BaseModel
     [Column("user_id")] public int UserId { get; set; }
 
     public virtual User User { get; set; }
+
+    [Column("status")] public ChatStatus Status { get; set; }
+}
+
+public enum ChatStatus
+{
+    Active,
+    Closed
 }

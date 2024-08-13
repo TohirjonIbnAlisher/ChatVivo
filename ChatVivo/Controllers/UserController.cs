@@ -10,7 +10,7 @@ namespace ChatVivo.Controllers;
 public class UserController : ControllerBase
 {
     private IUserService _userService;
-    private int count = 0;
+ 
     public UserController(IUserService userService)
     {
         _userService = userService;

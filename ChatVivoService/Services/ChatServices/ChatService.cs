@@ -1,6 +1,5 @@
 ﻿using ChatVivoService.Hubs;
 using Enitities.EntityModels;
-using Enitities.Repositories.ChatMemberRepository;
 using Enitities.Repositories.ChatRepositories;
 using Microsoft.AspNetCore.SignalR;
 

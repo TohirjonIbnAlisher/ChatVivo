@@ -31,11 +31,9 @@ public class UserService : IUserService
 
         User user = new User()
         {
-            FistName = userCreationDto.FirstName,
-            LastName = userCreationDto.LastName,
+            FIO = userCreationDto.FIO,
             CreatedAt = DateTime.Now,
             PhoneNumber = userCreationDto.PhoneNumber,
-            Email = userCreationDto.Email,
             IsModerator = userCreationDto.IsModerator,
             ConnectionId = userCreationDto.ConnectionId
         };
@@ -106,9 +104,8 @@ public class UserService : IUserService
         }
 
         storedUser.PhoneNumber = user.PhoneNumber ?? storedUser.PhoneNumber;
-        storedUser.FistName = user.FirstName ?? storedUser.FistName;
-        storedUser.LastName = user.LastName ?? storedUser.LastName;
-        storedUser.LastName = user.LastName ?? storedUser.LastName;
+        storedUser.FIO = user.FirstName ?? storedUser.FIO;
+       
         storedUser.UpdatedAt = DateTime.Now;
 
         var uptadetUser = await this._userRepository.UpdateAsync(storedUser);

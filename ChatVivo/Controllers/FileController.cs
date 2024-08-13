@@ -8,6 +8,7 @@ namespace ChatVivo.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public class FileController : ControllerBase
+
 {
     private readonly FileService _fileService;
 

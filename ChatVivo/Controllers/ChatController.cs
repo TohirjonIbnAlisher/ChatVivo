@@ -18,7 +18,8 @@ public class ChatController : ControllerBase
     [HttpPost]
     public async Task<Chat> CreateChatAsync(string chatName, int userId)
     {
-        var createdChat = await this._chatService.CreateChatAsync(chatName, userId);
+        var createdChat = await this._chatService
+            .CreateChatAsync(chatName, userId);
 
         return createdChat;
     }
@@ -26,7 +27,8 @@ public class ChatController : ControllerBase
     [HttpDelete("id")]
     public async Task<Chat> DeleteChatAsync(int chatId)
     {
-        var deletedChat = await this._chatService.DeleteChatAsync(chatId);
+        var deletedChat = await this._chatService
+            .DeleteChatAsync(chatId);
 
         return deletedChat;
     }
@@ -34,7 +36,8 @@ public class ChatController : ControllerBase
     [HttpGet("userId")]
     public IQueryable<Chat> GetAllChatsByUserId(int userId)
     {
-        var chatsByUserId = this._chatService.GetChatsByUserId(userId);
+        var chatsByUserId = this._chatService
+            .GetChatsByUserId(userId);
 
         return chatsByUserId;
     }
