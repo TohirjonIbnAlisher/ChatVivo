@@ -1,4 +1,5 @@
-﻿using Enitities.FileModels;
+﻿using ChatVivoService.DataTransferObjects.MessageDTOs;
+using Enitities.FileModels;
 
 namespace ChatVivo.Helpers;
 
@@ -55,7 +56,7 @@ public static class FileHelper
 
     }
 
-    public static string AddFiles(AddFileModels model)
+    public static string AddFiles(CreationMessageFileDTO model)
     {
         try
         {

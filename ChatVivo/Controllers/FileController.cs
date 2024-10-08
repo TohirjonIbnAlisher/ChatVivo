@@ -1,6 +1,6 @@
 ﻿using ChatVivo.Helpers;
+using ChatVivoService.DataTransferObjects.MessageDTOs;
 using ChatVivoService.Services.FileServices;
-using Enitities.FileModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatVivo.Controllers;
@@ -20,11 +20,11 @@ public class FileController : ControllerBase
 
     [HttpPost]
     public async Task<IActionResult> AddFileAsync(
-        [FromForm] AddFileModels model)
+        [FromForm] CreationMessageFileDTO model)
     {
         var path = FileHelper.AddFiles(model);
 
-        var insertedPhoto = await _fileService.SendFilePathAsync(path, model.UserFileHelper);
+        var insertedPhoto = await _fileService.SendFilePathAsync(path, model as MessageDTO);
 
         return Ok(insertedPhoto);
     }

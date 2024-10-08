@@ -1,4 +1,4 @@
-﻿using ChatVivoService.DataTransferObjects;
+﻿using ChatVivoService.DataTransferObjects.MessageDTOs;
 using ChatVivoService.Services;
 using Enitities.EntityModels;
 using Microsoft.AspNetCore.Mvc;
@@ -18,31 +18,18 @@ public class MessageController : ControllerBase
 
     [HttpPost]
     public async Task<IActionResult> CreateMessageAsync(
-        [FromBody] CreateMessageDTO dto)
+        [FromBody] CreationMessageTextDTO dto)
     {
         var cretedMessage = await this._messageService.CreateMessageAsync(dto);
         return Ok(cretedMessage);
     }
 
     [HttpGet("GetMessagesByUserId")]
-    public IQueryable<Message> GetAllMessagesByUserId(int userId)
+    public async Task<IQueryable<Message>> GetAllMessagesByUserId(ParameterMessageDTO dto)
     {
-        var messages = this._messageService.GetAllMessagesByUserId(userId);
+        var messages = await this._messageService.GetAllMessagesByUserId(dto);
 
         return messages;
     }
 
-    [HttpGet("GetMessageByChatId")]
-    public IQueryable<Message> GetAllMessageByChatId(int chatId)
-    {
-        return this._messageService.GetAllMessagesByChatId(chatId);
-    }
-
-    [HttpPut("id")]
-    public async Task<Message> UpdateMessageStatusAsync(int messageId)
-    {
-        var updatedMessage = await this._messageService.UpdateMessageStatusAsync(messageId);
-
-        return updatedMessage;
-    }
 }
